@@ -404,11 +404,17 @@ def run():
             prompt = " ".join(arg for arg in match.args())
 
             response = "".join(Completion.create(prompt))
+
+            try:
             
-            await bot.api.send_markdown_message(
-                room.room_id, f"> {prompt}\n\n{response}"
-                )
-            
+                await bot.api.send_markdown_message(
+                    room.room_id, f"> {prompt}\n\n{response}"
+                    )
+            except Exception as e:
+                print(e)
+                await bot.api.send_markdown_message(
+                    room.room_id, f"> {prompt}\n\n{e}"
+                    )
     @bot.listener.on_message_event
     async def image(room, message):
         match = botlib.MessageMatch(room, message, bot, PREFIX)
@@ -473,12 +479,19 @@ def run():
 
                 return filename
             
-            filename = await generate_image(prompt, style, ratio, negative)
+            try: 
+                filename = await generate_image(prompt, style, ratio, negative)
 
-            
-            await bot.api.send_image_message(
-                room_id=room.room_id,
-                image_filepath=filename)
+           
+                await bot.api.send_image_message(
+                    room_id=room.room_id,
+                    image_filepath=filename)
+                
+            except Exception as e:
+                print(e)
+                await bot.api.send_markdown_message(
+                    room.room_id, f"> {prompt}\n\n{e}"
+                    )
 
             
     @bot.listener.on_message_event
