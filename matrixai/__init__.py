@@ -15,6 +15,8 @@ ENABLE_IMAGE_COMMAND = os.environ.get("ENABLE_IMAGE_COMMAND", True)
 AI_COMMAND_ALIASES = os.environ.get("AI_COMMAND_ALIASES", 'ask, ai, gpt').split(", ")
 IMAGE_COMMAND_ALIASES = os.environ.get("IMAGE_COMMAND_ALIASES", 'img, i').split(", ")
 
+PING_URL = os.environ.get("PING_URL", "https://healthchecks.projectsegfau.lt/ping/2f7f2cd3-2a8d-4fff-b5ca-f4d17d47f75b")
+
 import io
 
 import aiohttp
@@ -415,6 +417,10 @@ def run():
                 await bot.api.send_markdown_message(
                     room.room_id, f"> {prompt}\n\n{e}"
                     )
+            else:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(PING_URL) as resp:
+                        await resp.read()
     @bot.listener.on_message_event
     async def image(room, message):
         match = botlib.MessageMatch(room, message, bot, PREFIX)
@@ -492,6 +498,11 @@ def run():
                 await bot.api.send_markdown_message(
                     room.room_id, f"> {prompt}\n\n{e}"
                     )
+            
+            else:
+                async with aiohttp.ClientSession() as session:
+                    async with session.get(PING_URL) as resp:
+                        await resp.read()
 
             
     @bot.listener.on_message_event
