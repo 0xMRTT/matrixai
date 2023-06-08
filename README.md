@@ -1,5 +1,7 @@
 # MatrixAI Bot
 
+![]( https://healthchecks.projectsegfau.lt/badge/1de0ebc9-6c86-48b5-9992-7b44bcc4b483/4fokvU0o.svg )
+
 A Matrix Bot for chatting with AI and generating pictures
 
 ## Usage
