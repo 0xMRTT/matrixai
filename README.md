@@ -29,5 +29,6 @@ And after
 ## Thanks
 
 - [Baichat-py](https://bavarder.codeberg.page/code/baichat)
+- [Project Segfault](https://psf.lt)
 - [Simple Matrix Bot](https://simple-matrix-bot-lib.readthedocs.io/en/latest/examples.html)
 - [Discord AI](https://github.com/mishalhossin/Discord-AI-Chatbot/tree/main)
