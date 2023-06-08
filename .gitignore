@@ -2,3 +2,5 @@ secret
 session.txt
 *.pyc
 store/
+*.png
+run.sh
