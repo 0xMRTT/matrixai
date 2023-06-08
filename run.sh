@@ -1,6 +1,7 @@
 cd /home/0xmrtt/matrixai
-poetry install
 
 export MATRIX_PASSWORD="a secret password"
+export AI_COMMAND_ALIASES="gpt,ask"
 
-poetry run python matrixai/__init__.py
+python matrixai/__init__.py
+
