@@ -1,0 +1,4 @@
+secret
+session.txt
+*.pyc
+store/
