@@ -496,6 +496,7 @@ def run():
             
     @bot.listener.on_message_event
     async def bot_help(room, message):
+        styles = ", ".join([style.name for style in Style])
         bot_help_message = f"""
 Help Message:
     prefix: {PREFIX}
@@ -516,7 +517,7 @@ Help Message:
                 style:
                     description: style of image
                     example: style=IMAGINE_V3
-                    values: IMAGINE_V3, IMAGINE_V4_Beta, V4_CREATIVE, ANIME_V2, REALISTIC, DISNEY, STUDIO_GHIBLI
+                    values: {styles}
                 ratio:
                     description: ratio of image
                     example: ratio=RATIO_1X1
