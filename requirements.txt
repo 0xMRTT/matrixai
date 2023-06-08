@@ -1,0 +1,4 @@
+simplematrixbotlib 
+baichat-py 
+aiohttp 
+langdetect 

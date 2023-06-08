@@ -1,11 +1,10 @@
 [Unit]
-Description=Matrix AI
-After=multi-user.target
-
+Description=Matrix AI Bot
+ 
 [Service]
 Type=simple
-Restart=always
-ExecStart=/home/0xmrtt/matrixai/run.sh
+ExecStart=/bin/bash /home/0xmrtt/matrixai/run.sh
+WorkingDirectory=/home/0xmrtt/matrixai
 
 [Install]
 WantedBy=multi-user.target
