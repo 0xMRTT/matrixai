@@ -1,7 +1,11 @@
 [Unit]
 Description=Matrix AI
-After=multi-user.target[Service]
+After=multi-user.target
+
+[Service]
 Type=simple
 Restart=always
-ExecStart=/usr/bin/python3 /home/0xmrtt/matrixai/run.sh
+ExecStart=/home/0xmrtt/matrixai/run.sh
+
+[Install]
 WantedBy=multi-user.target

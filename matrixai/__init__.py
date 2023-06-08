@@ -445,8 +445,12 @@ def run():
             async def generate_image(image_prompt, style_value, ratio_value, negative):
                 imagine = AsyncImagine()
                 filename = str(uuid.uuid4()) + ".png"
-                style_enum = Style[style_value]
-                ratio_enum = Ratio[ratio_value]
+                try:
+                    style_enum = Style[style_value]
+                    ratio_enum = Ratio[ratio_value]
+                except KeyError:
+                    style_enum = Style.IMAGINE_V3
+                    ratio_enum = Ratio.RATIO_1X1
                 img_data = await imagine.sdprem(
                     prompt=image_prompt,
                     style=style_enum,
