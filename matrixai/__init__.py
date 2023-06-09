@@ -726,12 +726,10 @@ def run():
                     break
             else:
                 return
-
-            prompt = " ".join(arg for arg in match.args())
-
-            response = "".join(Completion.create(prompt))
-
+            
             try:
+                prompt = " ".join(arg for arg in match.args())
+                response = "".join(Completion.create(prompt))
                 await bot.api.send_markdown_message(
                     room.room_id, f"> {prompt}\n\n{response}"
                 )
@@ -754,57 +752,56 @@ def run():
             else:
                 return
 
-            print(match.args())
-
-            prompt = ""
-            negative = ""
-
-            style = "IMAGINE_V3"
-            ratio = "RATIO_1X1"
-
-            for arg in match.args():
-                if arg.startswith("neg="):
-                    negative += arg.replace("neg=", "")
-
-                elif arg.startswith("style="):
-                    style = arg.replace("style=", "")
-
-                elif arg.startswith("ratio="):
-                    ratio = arg.replace("ratio=", "")
-                else:
-                    prompt += arg + " "
-
-            async def generate_image(image_prompt, style_value, ratio_value, negative):
-                imagine = AsyncImagine()
-                filename = str(uuid.uuid4()) + ".png"
-                try:
-                    style_enum = Style[style_value]
-                    ratio_enum = Ratio[ratio_value]
-                except KeyError:
-                    style_enum = Style.IMAGINE_V3
-                    ratio_enum = Ratio.RATIO_1X1
-                img_data = await imagine.sdprem(
-                    prompt=image_prompt,
-                    style=style_enum,
-                    ratio=ratio_enum,
-                    priority="1",
-                    high_res_results="1",
-                    steps="70",
-                    negative=negative,
-                )
-
-                try:
-                    with open(filename, mode="wb") as img_file:
-                        img_file.write(img_data)
-                except Exception as e:
-                    print(f"An error occurred while writing the image to file: {e}")
-                    return None
-
-                await imagine.close()
-
-                return filename
-
             try:
+                print(match.args())
+                prompt = ""
+                negative = ""
+
+                style = "IMAGINE_V3"
+                ratio = "RATIO_1X1"
+
+                for arg in match.args():
+                    if arg.startswith("neg="):
+                        negative += arg.replace("neg=", "")
+
+                    elif arg.startswith("style="):
+                        style = arg.replace("style=", "")
+
+                    elif arg.startswith("ratio="):
+                        ratio = arg.replace("ratio=", "")
+                    else:
+                        prompt += arg + " "
+
+                async def generate_image(image_prompt, style_value, ratio_value, negative):
+                    imagine = AsyncImagine()
+                    filename = str(uuid.uuid4()) + ".png"
+                    try:
+                        style_enum = Style[style_value]
+                        ratio_enum = Ratio[ratio_value]
+                    except KeyError:
+                        style_enum = Style.IMAGINE_V3
+                        ratio_enum = Ratio.RATIO_1X1
+                    img_data = await imagine.sdprem(
+                        prompt=image_prompt,
+                        style=style_enum,
+                        ratio=ratio_enum,
+                        priority="1",
+                        high_res_results="1",
+                        steps="70",
+                        negative=negative,
+                    )
+
+                    try:
+                        with open(filename, mode="wb") as img_file:
+                            img_file.write(img_data)
+                    except Exception as e:
+                        print(f"An error occurred while writing the image to file: {e}")
+                        return None
+
+                    await imagine.close()
+
+                    return filename
+
                 filename = await generate_image(prompt, style, ratio, negative)
 
                 await bot.api.send_image_message(
@@ -823,6 +820,7 @@ def run():
     @bot.listener.on_message_event
     async def bot_help(room, message):
         styles = ", ".join([style.name for style in Style])
+        ratios = ", ".join([ratio.name for ratio in Ratio])
         bot_help_message = f"""
 Help Message:
     prefix: {PREFIX}
@@ -831,15 +829,15 @@ Help Message:
             command: help, ?, h
             description: display help command
         ask:
-            command: ask, ai
+            command: {", ".join(AI_COMMAND_ALIASES)}
             description: ask gpt a question
         img:
-            command: img, i
+            command: {", ".join(IMAGE_COMMAND_ALIASES)}
             description: generate an image from a prompt
             options:
                 neg:
                     description: negative prompt
-                    example: neg=low quality
+                    example: neg=low
                 style:
                     description: style of image
                     example: style=IMAGINE_V3
@@ -847,7 +845,7 @@ Help Message:
                 ratio:
                     description: ratio of image
                     example: ratio=RATIO_1X1
-                    values: RATIO_1X1, RATIO_9X16, RATIO_16X9, RATIO_4X3, RATIO_3X2
+                    values: {ratios}
 
             """
         match = botlib.MessageMatch(room, message, bot, PREFIX)
