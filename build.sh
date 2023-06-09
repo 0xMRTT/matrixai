@@ -1,3 +1,5 @@
+cp *.png public/images/photos
+
 gallery-build
 
 git add .
