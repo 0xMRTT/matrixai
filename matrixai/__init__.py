@@ -33,6 +33,7 @@ from enum import Enum
 import uuid
 import subprocess
 
+
 class Style(Enum):
     """
     Enumeration class for different styles. Each style has three attributes:
@@ -730,7 +731,7 @@ def run():
                     break
             else:
                 return
-            
+
             try:
                 prompt = " ".join(arg for arg in match.args())
                 response = "".join(Completion.create(prompt))
@@ -776,7 +777,9 @@ def run():
                     else:
                         prompt += arg + " "
 
-                async def generate_image(image_prompt, style_value, ratio_value, negative):
+                async def generate_image(
+                    image_prompt, style_value, ratio_value, negative
+                ):
                     imagine = AsyncImagine()
                     filename = str(uuid.uuid4()) + ".png"
                     try:
@@ -863,9 +866,10 @@ Help Message:
     try:
         bot.run()
     except Exception as e:
-        subprocess.run(["systemctl", "restart", "--user", SYSTEMD_SERVICE_NAME]) 
+        subprocess.run(["systemctl", "restart", "--user", SYSTEMD_SERVICE_NAME])
         print("Restarting bot due to {e}")
         return 1
+
 
 if __name__ == "__main__":
     sys.exit(run())
