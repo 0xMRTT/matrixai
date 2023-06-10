@@ -6,3 +6,4 @@ store/
 run.sh
 templates/
 public/
+.env
