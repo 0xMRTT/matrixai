@@ -20,14 +20,18 @@ PING_URL = os.environ.get(
     "https://healthchecks.projectsegfau.lt/ping/2f7f2cd3-2a8d-4fff-b5ca-f4d17d47f75b",
 )
 
+SYSTEMD_SERVICE_NAME = os.environ.get("SYSTEMD_SERVICE_NAME", "matrixai")
+
 import io
 
 import aiohttp
+import asyncio
+import os
 from langdetect import detect
 
 from enum import Enum
 import uuid
-
+import subprocess
 
 class Style(Enum):
     """
@@ -856,8 +860,12 @@ Help Message:
         ):
             await bot.api.send_text_message(room.room_id, bot_help_message)
 
-    bot.run()
-
+    try:
+        bot.run()
+    except Exception as e:
+        subprocess.run(["systemctl", "restart", "--user", SYSTEMD_SERVICE_NAME]) 
+        print("Restarting bot due to {e}")
+        return 1
 
 if __name__ == "__main__":
     sys.exit(run())
